@@ -2,7 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 
-interface UnifiedButtonProps {
+interface IButtonProps {
   label: string;
   onClick: () => void;
   type?: 'solid' | 'transparent';
@@ -10,15 +10,15 @@ interface UnifiedButtonProps {
   textColor?: string;
   shape?: 'rounded' | 'square' | 'pill';
   size?: 'small' | 'medium' | 'large';
-  licon?: IconDefinition; // Correct type for FontAwesome icons
-  ricon?: IconDefinition; // Correct type for FontAwesome icons
+  licon?: IconDefinition;
+  ricon?: IconDefinition;
   disabled?: boolean;
   outline?: boolean;
   width?: string;
   height?: string;
 }
 
-const UnifiedButton: React.FC<UnifiedButtonProps> = ({
+const IButton: React.FC<IButtonProps> = ({
   label,
   onClick,
   type = 'solid',
@@ -72,4 +72,4 @@ const UnifiedButton: React.FC<UnifiedButtonProps> = ({
   );
 };
 
-export default UnifiedButton;
+export default IButton;
