@@ -2,30 +2,74 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 
-type ButtonProps = {
+interface UnifiedButtonProps {
   label: string;
-  type: 'solid' | 'transparent';
-  licon?: IconDefinition;  // FontAwesome Icon
-  ricon?: IconDefinition;  // FontAwesome Icon
   onClick: () => void;
-};
+  type?: 'solid' | 'transparent';
+  color?: string;
+  textColor?: string;
+  shape?: 'rounded' | 'square' | 'pill';
+  size?: 'small' | 'medium' | 'large';
+  licon?: IconDefinition; // Correct type for FontAwesome icons
+  ricon?: IconDefinition; // Correct type for FontAwesome icons
+  disabled?: boolean;
+  outline?: boolean;
+  width?: string;
+  height?: string;
+}
 
-const IButton: React.FC<ButtonProps> = ({ label, type, licon, ricon, onClick }) => {
-  const baseStyles = 'flex items-center justify-center gap-2 px-4 py-2 rounded-md font-semibold focus:outline-none';
-  
-  // Conditional styling based on button type
-  const solidStyles = 'bg-orange-500 text-white hover:bg-orange-600 focus:ring-4 focus:ring-orange-300';
-  const transparentStyles = 'bg-transparent text-orange-500 border border-orange-500 hover:bg-orange-100 focus:ring-4 focus:ring-orange-300';
+const UnifiedButton: React.FC<UnifiedButtonProps> = ({
+  label,
+  onClick,
+  type = 'solid',
+  color = '#FFA500',
+  textColor = '#FFFFFF',
+  shape = 'rounded',
+  size = 'medium',
+  licon = null,
+  ricon = null,
+  disabled = false,
+  outline = false,
+  width = 'auto',
+  height = 'auto',
+}) => {
+  const baseStyles = `
+    flex items-center justify-center gap-2 font-semibold
+    ${size === 'small' ? 'px-3 py-1 text-sm' : size === 'large' ? 'px-6 py-3 text-lg' : 'px-4 py-2 text-base'}
+    ${shape === 'rounded' ? 'rounded-md' : shape === 'pill' ? 'rounded-full' : 'rounded-sm'}
+    ${disabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}
+    transition duration-300 ease-in-out
+  `;
+
+  const solidStyles = `
+    ${disabled ? '' : 'hover:brightness-110'}
+    bg-${outline ? 'transparent' : color} text-${outline ? color : textColor}
+    border border-${color}
+  `;
+
+  const transparentStyles = `
+    ${disabled ? '' : 'hover:bg-orange-100'}
+    bg-transparent text-${color} border border-${color}
+  `;
 
   const buttonStyles = type === 'solid' ? solidStyles : transparentStyles;
 
+  const styles: React.CSSProperties = {
+    width,
+    height,
+  };
+
   return (
-    <button onClick={onClick} className={`${baseStyles} ${buttonStyles}`}>
-      {licon && <FontAwesomeIcon icon={licon} className="w-4 h-4" />}
+    <button
+      onClick={!disabled ? onClick : undefined}
+      style={styles}
+      className={`${baseStyles} ${buttonStyles}`}
+    >
+      {licon && <FontAwesomeIcon icon={licon} />}
       <span>{label}</span>
-      {ricon && <FontAwesomeIcon icon={ricon} className="w-4 h-4" />}
+      {ricon && <FontAwesomeIcon icon={ricon} />}
     </button>
   );
 };
 
-export default IButton;
+export default UnifiedButton;

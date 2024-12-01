@@ -1,7 +1,8 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import Link from 'next/link'
+import IButton from '@/design-components/IButton/IButton';
 
 export default function Registration() {
   const router = useRouter();
@@ -25,6 +26,9 @@ export default function Registration() {
           <Link href="/login" className="text-teal-600 hover:underline">Already have an account? Login here</Link>
         </div>
       </div>
+      <IButton label={''} type={'solid'} onClick={function (): void {
+        throw new Error('Function not implemented.');
+      } }/>
     </div>
   );
 }
