@@ -4,7 +4,7 @@ import React from "react";
 import useForm from "@/hooks/useForm";
 import useLogin from "@/hooks/useLogin";
 import { LoginFormData } from "@/interfaces/auth";
-import LoginForm from "@/components/LoginForm/LoginForm";
+import LoginForm from "@/components/Forms/LoginForm/LoginForm";
 
 const LoginContainer: React.FC = () => {
   const { login, loading, error } = useLogin();

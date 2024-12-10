@@ -1,35 +1,37 @@
 "use client";
 
-import React from "react";
 import { useTickets } from "@/hooks/useTickets";
-import RouteCard from "@/components/RouteCard/RouteCard";
+import React from "react";
+import RouteCard from "../RouteCard/RouteCard";
 
-const TicketsList: React.FC = () => {
+
+const TicketList: React.FC = () => {
   const { tickets, loading, error } = useTickets();
 
-  if (loading) {
-    return <p>Loading tickets...</p>;
-  }
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
-
-  // Check if tickets exist and are an array
   if (!tickets || tickets.length === 0) {
-    return <p>No tickets available.</p>;
+    return <div>No tickets available at the moment.</div>;
   }
 
   return (
-    <div className="container mx-auto px-4">
-      <h1 className="text-2xl font-bold mb-4">Available Tickets</h1>
-      <div className="grid grid-cols-1 gap-6">
+    <div className="p-4 space-y-6">
+      <h1 className="text-2xl font-bold mb-6">Available Tickets</h1>
+
+      <div className="space-y-4">
         {tickets.map((ticket) => (
           <RouteCard
             key={ticket.id}
             id={ticket.id}
-            departureTime={new Date(ticket.departure_time).toLocaleTimeString()}
-            arrivalTime={new Date(ticket.arrival_time).toLocaleTimeString()}
+            departureTime={new Date(ticket.departure_time).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+            arrivalTime={new Date(ticket.arrival_time).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
             travelDuration={`${Math.floor(ticket.ride_time / 60)}h ${
               ticket.ride_time % 60
             }m`}
@@ -46,4 +48,4 @@ const TicketsList: React.FC = () => {
   );
 };
 
-export default TicketsList;
+export default TicketList;

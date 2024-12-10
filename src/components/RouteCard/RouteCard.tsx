@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,7 +5,7 @@ import { faBus, faWifi, faBolt } from "@fortawesome/free-solid-svg-icons";
 import SBadge from "@/design-components/SBadge/SBadge";
 import SButton from "@/design-components/SButton/SButton";
 
-interface RouteCardProps {
+export interface RouteCardProps {
   id: string | number;
   departureTime: string;
   arrivalTime: string;
