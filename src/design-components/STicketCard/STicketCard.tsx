@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBus, faWifi, faBolt } from "@fortawesome/free-solid-svg-icons";
 import SBadge from "@/design-components/SBadge/SBadge";
 import SButton from "@/design-components/SButton/SButton";
+import { useRouter } from "next/navigation";
 
 export interface STicketCardProps {
   id: string | number;
@@ -38,6 +39,11 @@ const STicketCard: React.FC<STicketCardProps> = ({
   passengerName,
   purchaseDate,
 }) => {
+    const router = useRouter();
+
+    const handleNavigate = () => {
+      router.push(`/purchase/${id}`);
+    };
   return (
     <div className="w-full p-4 bg-white rounded-lg shadow-md border border-gray-300 flex flex-col lg:flex-row items-start lg:items-center justify-between">
       <div className="w-full lg:w-[65%]">
@@ -84,7 +90,7 @@ const STicketCard: React.FC<STicketCardProps> = ({
             type="primary"
             size="sm"
             className="px-6 py-2 rounded bg-violet-600 text-white font-medium"
-            onClick={() => console.log(`Navigate to purchase page for ticket ID: ${id}`)}
+            onClick={handleNavigate}
           >
             შეძენა
           </SButton>
