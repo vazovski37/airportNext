@@ -19,10 +19,8 @@ const usePurchaseForm = (ticketId: number, price: number) => {
 
   const { user, loading: userLoading, error: userError } = useFetchUser();
 
-  // Calculate the total price
   const totalPrice = passengers.length * price;
 
-  // Add a new passenger
   const addPassenger = () => {
     if (passengers.length < 3) {
       setPassengers([...passengers, { firstName: "", lastName: "" }]);
@@ -31,12 +29,10 @@ const usePurchaseForm = (ticketId: number, price: number) => {
     }
   };
 
-  // Remove a passenger
   const deletePassenger = (index: number) => {
     setPassengers(passengers.filter((_, i) => i !== index));
   };
 
-  // Handle passenger field changes
   const handlePassengerChange = (
     index: number,
     field: keyof IPassenger,
@@ -47,14 +43,12 @@ const usePurchaseForm = (ticketId: number, price: number) => {
     setPassengers(updatedPassengers);
   };
 
-  // Handle contact field changes
   const handleContactChange = (field: keyof IContactInfo, value: string) => {
     setContactInfo({ ...contactInfo, [field]: value });
   };
 
   const router = useRouter();
 
-  // Handle form submission
   const handleSubmit = async () => {
     if (userLoading) {
       alert("User data is still loading. Please wait.");

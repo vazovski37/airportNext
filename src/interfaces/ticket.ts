@@ -14,8 +14,15 @@ export interface ITicket {
   arrival_time: string;
   travel_duration: number;
   price: string;
+  vehicle_name: string;
   departure_location: string;
   destination_location: string;
+  features?: string[];
+  passengerName?: {
+    firstName: string;
+    lastName: string;
+  };
+  purchaseDate?: string;
 }
 export interface ITimetable {
   id: number;
@@ -38,4 +45,19 @@ export interface IRoute {
   updated_at: string;
 }
 
-
+export interface IBoughtTicket {
+  id: number | string;
+  departureTime: string;
+  arrivalTime: string;
+  travelDuration: string;
+  departureLocation: string;
+  arrivalLocation: string;
+  price: string;
+  transportMode: string;
+  features: string[];
+  passengerName?: {
+    firstName: string;
+    lastName: string;
+  };
+  purchaseDate?: string;
+}

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { fetchTickets } from "../services/ticketService";
 import { ITicket } from "../interfaces/ticket";
 
-export const useTickets = () => {
+const useTickets = () => {
   const [tickets, setTickets] = useState<ITicket[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -24,3 +24,5 @@ export const useTickets = () => {
 
   return { tickets, loading, error };
 };
+
+export default useTickets;

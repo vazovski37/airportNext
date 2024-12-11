@@ -1,5 +1,6 @@
 'use client';
 
+import TicketContainer from '@/containers/TicketContainer';
 import UserInfoContainer from '@/containers/UserInfoContainer';
 import { useRouter } from 'next/navigation';
 
@@ -12,8 +13,9 @@ export default function Profile() {
   };
 
   return (
-    <div className="bg-gray-50 flex items-center justify-center">
+    <div className="bg-gray-50 flex-row items-center justify-center">
       <UserInfoContainer />
+      <TicketContainer type={'userPurchasedTickets'} />
     </div>
   );
 }

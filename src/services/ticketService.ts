@@ -1,5 +1,5 @@
 import { apiGet } from "@/utils/axiosInstance";
-import { IAvailableTicket, ITicket } from "@/interfaces/ticket";
+import { ITicket } from "@/interfaces/ticket";
 
 // Fetch all tickets
 export const fetchTickets = async (): Promise<ITicket[]> => {
@@ -10,4 +10,10 @@ export const fetchTickets = async (): Promise<ITicket[]> => {
 export const fetchTicketDetails = async (ticketId: number): Promise<ITicket> => {
   return apiGet(`/api/tickets/${ticketId}`);
 };
+export const fetchAllBoughtTickets = async (): Promise<ITicket[]> => {
+  return apiGet("/api/bought-tickets");
+};
 
+export const fetchUserBoughtTickets = async (): Promise<ITicket[]> => {
+  return apiGet("/api/user/bought-tickets");
+};

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { fetchTicketDetails } from "@/services/ticketService";
-import { IAvailableTicket } from "@/interfaces/ticket";
+import { ITicket } from "@/interfaces/ticket";
 
 const useTicketDetails = (ticketId: number) => {
-  const [ticket, setTicket] = useState<IAvailableTicket | null>(null);
+  const [ticket, setTicket] = useState<ITicket | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
