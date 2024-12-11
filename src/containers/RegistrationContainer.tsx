@@ -4,7 +4,7 @@ import React from "react";
 import useForm from "@/hooks/useForm";
 import useRegistration from "@/hooks/useRegister";
 import { RegistrationData } from "@/interfaces/auth";
-import RegistrationForm from "@/components/RegistrationForm/RegistrationForm";
+import RegistrationForm from "@/components/Forms/RegistrationForm/RegistrationForm";
 
 const RegistrationContainer: React.FC = () => {
   const { register, loading, error } = useRegistration();

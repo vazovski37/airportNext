@@ -1,49 +1,35 @@
 import { useState, useEffect } from "react";
-import { parseCookies } from "nookies";
-
-interface NavigationItem {
-  label: string;
-  path: string;
-}
+import { useAuthState } from "@/hooks/useAuthState";
+import { INavigationItem } from "@/interfaces/navigation";
 
 export const useNavigation = () => {
-  const [navigation, setNavigation] = useState<NavigationItem[]>([]);
-  const cookies = parseCookies();
-
-  const isLoggedIn = !!cookies.api_token;
-  const isAdmin = cookies.is_admin === "true";
+  const { authState } = useAuthState();
+  const { api_token, is_admin } = authState;
+  const [navigation, setNavigation] = useState<INavigationItem[]>([]);
 
   useEffect(() => {
-    // Define navigation items for each state
-    const guestNav: NavigationItem[] = [
-      { label: "Home", path: "/" },
-      { label: "Tickets", path: "/tickets" },
-      { label: "Login", path: "/login" },
-      { label: "Register", path: "/register" },
-    ];
-
-    const userNav: NavigationItem[] = [
-      { label: "Home", path: "/" },
-      { label: "Tickets", path: "/tickets" },
-      { label: "Profile", path: "/profile" },
-    ];
-
-    const adminNav: NavigationItem[] = [
-      { label: "Home", path: "/" },
-      { label: "Tickets", path: "/tickets" },
-      { label: "Profile", path: "/profile" },
-      { label: "Admin Dashboard", path: "/admin-dashboard" },
-    ];
-
-    // Determine navigation based on authentication and role
-    if (!isLoggedIn) {
-      setNavigation(guestNav);
-    } else if (isAdmin) {
-      setNavigation(adminNav);
+    if (is_admin) {
+      setNavigation([
+        { label: "Home", path: "/" },
+        { label: "Tickets", path: "/tickets" },
+        { label: "Profile", path: "/profile" },
+        { label: "Admin Dashboard", path: "/admin-dashboard" },
+      ]);
+    } else if (api_token) {
+      setNavigation([
+        { label: "Home", path: "/" },
+        { label: "Tickets", path: "/tickets" },
+        { label: "Profile", path: "/profile" },
+      ]);
     } else {
-      setNavigation(userNav);
+      setNavigation([
+        { label: "Home", path: "/" },
+        { label: "Tickets", path: "/tickets" },
+        { label: "Login", path: "/login" },
+        { label: "Register", path: "/register" },
+      ]);
     }
-  }, [isLoggedIn, isAdmin]);
+  }, [api_token, is_admin]);
 
-  return { navigation, isLoggedIn, isAdmin };
+  return { navigation, isLoggedIn: !!api_token, isAdmin: is_admin };
 };

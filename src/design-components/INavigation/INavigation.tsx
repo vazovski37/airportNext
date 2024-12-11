@@ -3,18 +3,36 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useNavigation } from "@/hooks/useNavigation";
-import { destroyCookie } from "nookies";
+import { useAuth } from "@/context/AuthContext";
 
 const INavigation: React.FC = () => {
-  const { navigation, isLoggedIn } = useNavigation();
+  const { isLoggedIn, isAdmin, logout } = useAuth();
   const router = useRouter();
 
   const handleLogout = () => {
-    destroyCookie(null, "api_token");
-    destroyCookie(null, "is_admin");
+    logout();
     router.push("/login");
   };
+
+  const navigation = isAdmin
+    ? [
+        { label: "Home", path: "/" },
+        { label: "Tickets", path: "/tickets" },
+        { label: "Profile", path: "/profile" },
+        { label: "Admin Dashboard", path: "/admin-dashboard" },
+      ]
+    : isLoggedIn
+    ? [
+        { label: "Home", path: "/" },
+        { label: "Tickets", path: "/tickets" },
+        { label: "Profile", path: "/profile" },
+      ]
+    : [
+        { label: "Home", path: "/" },
+        { label: "Tickets", path: "/tickets" },
+        { label: "Login", path: "/login" },
+        { label: "Register", path: "/register" },
+      ];
 
   return (
     <nav className="bg-gray-800 p-4">

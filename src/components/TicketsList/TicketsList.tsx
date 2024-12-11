@@ -4,7 +4,6 @@ import { useTickets } from "@/hooks/useTickets";
 import React from "react";
 import RouteCard from "../RouteCard/RouteCard";
 
-
 const TicketList: React.FC = () => {
   const { tickets, loading, error } = useTickets();
 
@@ -32,15 +31,15 @@ const TicketList: React.FC = () => {
               hour: "2-digit",
               minute: "2-digit",
             })}
-            travelDuration={`${Math.floor(ticket.ride_time / 60)}h ${
-              ticket.ride_time % 60
+            travelDuration={`${Math.floor(ticket.travel_duration / 60)}h ${
+              ticket.travel_duration % 60
             }m`}
             departureLocation={ticket.departure_location}
-            terminalInfo={ticket.terminal_info || null}
-            arrivalLocation={ticket.arrival_location}
+            terminalInfo={null} // No terminal info in provided data
+            arrivalLocation={ticket.destination_location}
             price={`$${ticket.price}`}
-            transportMode={ticket.transport_mode || "Bus"}
-            features={ticket.features || []}
+            transportMode={"Bus"} // Default transport mode as no transportMode field
+            features={[]} // No features field in provided data
           />
         ))}
       </div>

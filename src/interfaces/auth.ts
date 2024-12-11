@@ -20,6 +20,11 @@ is_admin: boolean;
 token: string;
 }
 
+export interface IAuthState {
+  api_token: string | null;
+  is_admin: boolean;
+}
+
 export interface LoginFormData {
   email: string;
   password: string;
@@ -54,3 +59,14 @@ export interface Timetable {
     timetable: Timetable | null;
   }
   
+export interface IUser {
+  user: {
+    first_name: string;
+    last_name: string;
+    email: string;
+    updated_at: string;
+    created_at: string;
+    id: number;
+  };
+  is_admin: boolean;
+}

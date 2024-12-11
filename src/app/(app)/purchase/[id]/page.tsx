@@ -1,43 +1,45 @@
-// "use client";
+"use client";
 
-// import React, { useEffect, useState } from "react";
-// import { useSearchParams } from "next/navigation";
-// import PurchaseForm from "@/components/PurchaseForm/PurchaseForm";
-// // import { fetchTicketData } from "@/utils/fetchTicketData";
+import React, { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import PurchaseForm from "@/components/Forms/PurchaseForm/PurchaseForm";
+import { fetchTicketDetails } from "@/services/ticketService";
+import { ITicket } from "@/interfaces/ticket";
 
-// const PurchasePage = () => {
-//   const searchParams = useSearchParams();
-//   const ticketId = searchParams.get("id");
+const PurchasePage: React.FC = () => {
+  const { id } = useParams(); // Get the ticket ID from the URL
+  const [ticketDetails, setTicketDetails] = useState<ITicket | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-//   const [ticketDetails, setTicketDetails] = useState(null);
+  useEffect(() => {
+    const fetchDetails = async () => {
+      try {
+        setLoading(true);
+        const response = await fetchTicketDetails(Number(id)); // Use the service to fetch ticket details
+        setTicketDetails(response);
+      } catch (err: any) {
+        setError(err.response?.data?.message || "Failed to fetch ticket details.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       if (ticketId) {
-//         const data = await fetchTicketData(ticketId);
-//         setTicketDetails(data);
-//       }
-//     };
-//     fetchData();
-//   }, [ticketId]);
+    if (id) fetchDetails();
+  }, [id]);
 
-//   if (!ticketDetails) {
-//     return (
-//       <div className="min-h-screen flex items-center justify-center">
-//         <p className="text-lg text-red-500">
-//           Loading ticket details or invalid ticket ID.
-//         </p>
-//       </div>
-//     );
-//   }
+  if (loading) return <div>Loading ticket details...</div>;
+  if (error) return <div>Error: {error}</div>;
 
-//   return (
-//     <div className="min-h-screen bg-gray-50 py-10">
-//       <div className="max-w-6xl mx-auto">
-//         <PurchaseForm ticketDetails={ticketDetails} />
-//       </div>
-//     </div>
-//   );
-// };
+  return (
+    <div>
+      {ticketDetails ? (
+        <PurchaseForm ticketDetails={ticketDetails} />
+      ) : (
+        <div>No ticket details found.</div>
+      )}
+    </div>
+  );
+};
 
-// export default PurchasePage;
+export default PurchasePage;
