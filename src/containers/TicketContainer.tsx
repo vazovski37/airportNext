@@ -7,28 +7,39 @@ import useAllBoughtTickets from "@/hooks/useAllBoughtTickets";
 import STicketCard from "@/design-components/STicketCard/STicketCard";
 import { ITicket } from "@/interfaces/ticket";
 
-type TicketContainerType = "availableTickets" | "userPurchasedTickets" | "allPurchasedTickets";
+type TicketContainerType = "availableTickets" | "userPurchasedTickets" | "allPurchasedTickets" | "searchAvailableTickets";
 
 interface TicketContainerProps {
   type: TicketContainerType;
+  tickets?: ITicket[] | null; 
+  loading?: boolean; 
+  error?: string | null; 
 }
 
-const TicketContainer: React.FC<TicketContainerProps> = ({ type }) => {
+const TicketContainer: React.FC<TicketContainerProps> = ({ type, tickets: passedTickets, loading: passedLoading, error: passedError }) => {
   let tickets: ITicket[] | null = null;
   let loading = false;
   let error: string | null = null;
 
-  if (type === "availableTickets") {
+  if (type === "searchAvailableTickets") {
+    // Use passed props for `searchAvailableTickets`
+    tickets = passedTickets || null;
+    loading = passedLoading || false;
+    error = passedError || null;
+  } else if (type === "availableTickets") {
+    // Fetch available tickets internally
     const { tickets: availableTickets, loading: availableLoading, error: availableError } = useTickets();
     tickets = availableTickets;
     loading = availableLoading;
     error = availableError;
   } else if (type === "userPurchasedTickets") {
+    // Fetch user purchased tickets internally
     const { tickets: userTickets, loading: userLoading, error: userError } = useUserBoughtTickets();
     tickets = userTickets;
     loading = userLoading;
     error = userError;
   } else if (type === "allPurchasedTickets") {
+    // Fetch all purchased tickets internally
     const { tickets: allTickets, loading: allLoading, error: allError } = useAllBoughtTickets();
     tickets = allTickets;
     loading = allLoading;
@@ -53,12 +64,13 @@ const TicketContainer: React.FC<TicketContainerProps> = ({ type }) => {
         {type === "availableTickets" && "Available Tickets"}
         {type === "userPurchasedTickets" && "My Purchased Tickets"}
         {type === "allPurchasedTickets" && "All Purchased Tickets"}
+        {type === "searchAvailableTickets" && "Search Results"}
       </h1>
 
       <div className="space-y-4">
         {tickets.map((ticket) => (
           <STicketCard
-            mode={type === "availableTickets" ? "available" : "purchased"}
+            mode={type === "availableTickets" || type === "searchAvailableTickets" ? "available" : "purchased"}
             key={ticket.id}
             id={ticket.id}
             departureTime={new Date(ticket.departure_time).toLocaleTimeString([], {
@@ -73,13 +85,13 @@ const TicketContainer: React.FC<TicketContainerProps> = ({ type }) => {
               ticket.travel_duration % 60
             }m`}
             departureLocation={ticket.departure_location}
-            terminalInfo={null} // No terminal info in provided data
+            terminalInfo={null}
             arrivalLocation={ticket.destination_location}
             price={`$${ticket.price}`}
-            transportMode={ticket.vehicle_name} // Default transport mode as no transportMode field
-            passengerName={type !== "availableTickets" ? ticket.passengerName : undefined}
-            purchaseDate={type !== "availableTickets" ? ticket.purchaseDate : undefined}
-            features={[]} // No features field in provided data
+            transportMode={ticket.vehicle_name}
+            passengerName={type !== "availableTickets" && type !== "searchAvailableTickets" ? ticket.passengerName : undefined}
+            purchaseDate={type !== "availableTickets" && type !== "searchAvailableTickets" ? ticket.purchaseDate : undefined}
+            features={[]} 
           />
         ))}
       </div>

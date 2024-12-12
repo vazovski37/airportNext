@@ -1,15 +1,28 @@
 import React, { useState } from "react";
 import useSearchLocations from "@/hooks/useSearchLocations";
 import SInput from "@/design-components/SInput/SInput";
+import { ILocation } from "@/interfaces/location";
 
-const LocationSearchComponent = () => {
+interface LocationSearchComponentProps {
+  onSelect: (location: ILocation) => void;
+}
+
+const LocationSearchComponent: React.FC<LocationSearchComponentProps> = ({ onSelect }) => {
   const { locations, loading, error, search } = useSearchLocations();
   const [query, setQuery] = useState("");
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newQuery = e.target.value;
     setQuery(newQuery);
-    search(newQuery); // Auto-trigger search
+    setShowDropdown(!!newQuery.trim());
+    search(newQuery);
+  };
+
+  const handleLocationSelect = (location: ILocation) => {
+    onSelect(location); // Pass the selected location to the parent
+    setQuery(location.location_name);
+    setShowDropdown(false);
   };
 
   return (
@@ -21,7 +34,7 @@ const LocationSearchComponent = () => {
         className="w-full"
       />
 
-      {query.trim() && (
+      {showDropdown && (
         <div className="absolute top-full left-0 mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-lg z-50">
           {loading && <div className="p-4 text-center text-gray-500">Loading...</div>}
           {error && <div className="p-4 text-center text-red-500">{error}</div>}
@@ -31,7 +44,7 @@ const LocationSearchComponent = () => {
                 <li
                   key={loc.id}
                   className="p-2 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => console.log(`Selected location: ${loc.location_name}`)}
+                  onClick={() => handleLocationSelect(loc)}
                 >
                   {loc.location_name}
                 </li>

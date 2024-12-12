@@ -9,7 +9,7 @@ export const searchLocations = async (
     throw new Error("Query parameter is required.");
   }
 
-  const response = await apiGet(`/api/locations/search?query=${encodeURIComponent(query)}`, {
+  const response = await apiGet(`/api/locations?query=${encodeURIComponent(query)}`, {
     signal: options?.signal,
   });
 

@@ -1,16 +1,22 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import RouteCard from '@/components/RouteCard/RouteCard';
-import HeroSection from '@/components/hero/Hero';
-import TicketContainer from '@/containers/TicketContainer';
+import React, { useState } from "react";
+import HeroSection from "@/components/hero/Hero";
+import TicketContainer from "@/containers/TicketContainer";
+import { ITicket } from "@/interfaces/ticket";
 
 const TicketsPage = () => {
+  const [tickets, setTickets] = useState<ITicket[] | null>(null);
+
   return (
     <div className="min-h-screen bg-gray-50 py-0 px-0 flex flex-col gap-8">
-        <HeroSection />
+      <HeroSection setTickets={setTickets} />
       <div className="max-w-3xl w-full mx-auto space-y-6">
-          <TicketContainer type={'availableTickets'} />
+        {tickets ? (
+          <TicketContainer type="searchAvailableTickets" tickets={tickets} />
+        ) : (
+          <TicketContainer type="availableTickets" />
+        )}
       </div>
     </div>
   );
