@@ -1,7 +1,12 @@
+"use client";
+
 import React from "react";
+import { useRouter } from "next/navigation";
 import SButton from "@/design-components/SButton/SButton";
 
 function WelcomeComponent() {
+  const router = useRouter();
+
   return (
     <div className="bg-white rounded-[8px] shadow-md p-[16px] text-center">
       {/* Title */}
@@ -22,7 +27,7 @@ function WelcomeComponent() {
         <SButton
           type="primary"
           size="md"
-          onClick={() => console.log("Book Ticket clicked")}
+          onClick={() => router.push("/tickets")}
         >
           ბილეთის შეძენა
         </SButton>
@@ -31,7 +36,7 @@ function WelcomeComponent() {
         <SButton
           type="secondaryColor"
           size="md"
-          onClick={() => console.log("Check Flights clicked")}
+          onClick={() => router.push("/us")}
         >
           ჩვენს შესახებ
         </SButton>

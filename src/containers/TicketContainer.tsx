@@ -22,24 +22,20 @@ const TicketContainer: React.FC<TicketContainerProps> = ({ type, tickets: passed
   let error: string | null = null;
 
   if (type === "searchAvailableTickets") {
-    // Use passed props for `searchAvailableTickets`
     tickets = passedTickets || null;
     loading = passedLoading || false;
     error = passedError || null;
   } else if (type === "availableTickets") {
-    // Fetch available tickets internally
     const { tickets: availableTickets, loading: availableLoading, error: availableError } = useTickets();
     tickets = availableTickets;
     loading = availableLoading;
     error = availableError;
   } else if (type === "userPurchasedTickets") {
-    // Fetch user purchased tickets internally
     const { tickets: userTickets, loading: userLoading, error: userError } = useUserBoughtTickets();
     tickets = userTickets;
     loading = userLoading;
     error = userError;
   } else if (type === "allPurchasedTickets") {
-    // Fetch all purchased tickets internally
     const { tickets: allTickets, loading: allLoading, error: allError } = useAllBoughtTickets();
     tickets = allTickets;
     loading = allLoading;
