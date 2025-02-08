@@ -39,7 +39,7 @@ const useForm = <T extends Record<string, any>>({
     setLoading(true);
     try {
       await onSubmit(values);
-      setValues(initialValues); // Reset form after successful submission
+      setValues(initialValues);
     } catch (err) {
       console.error("Form submission failed:", err);
     } finally {

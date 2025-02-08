@@ -16,13 +16,12 @@ user: {
     created_at: string;
     id: number;
 };
-is_admin: boolean;
 token: string;
 }
 
 export interface IAuthState {
   api_token: string | null;
-  is_admin: boolean;
+  role: "admin" | "agent" | "passenger" | "driver" | null;
 }
 
 export interface LoginFormData {
@@ -32,13 +31,7 @@ export interface LoginFormData {
 
 export interface LoginResponse {
   message: string;
-  user: {
-    id: number;
-    email: string;
-    name: string;
-    is_admin: boolean;
-  };
-  is_admin: boolean;
+  user: IUser;
   token: string;
 }
 
@@ -60,13 +53,12 @@ export interface Timetable {
   }
   
 export interface IUser {
-  user: {
-    first_name: string;
-    last_name: string;
-    email: string;
-    updated_at: string;
-    created_at: string;
-    id: number;
-  };
-  is_admin: boolean;
+  id: number;
+  email: string;
+  first_name: string;
+  last_name: string;
+  email_verified: number;
+  created_at: string;
+  updated_at: string;
+  role: "admin" | "agent" | "passenger" | "driver";
 }

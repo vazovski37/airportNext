@@ -1,18 +1,23 @@
 import { useState, useEffect } from "react";
 import { parseCookies, setCookie, destroyCookie } from "nookies";
 import { IAuthState } from "@/interfaces/auth";
+import { logoutUser } from "@/services/authService";
+
+type UserRole = "admin" | "agent" | "passenger" | "driver" | null; // ✅ Define allowed roles
 
 export const useAuthState = () => {
   const [authState, setAuthStateInternal] = useState<IAuthState>({
     api_token: null,
-    is_admin: false,
+    role: null,
   });
 
   useEffect(() => {
     const cookies = parseCookies();
+    const role = cookies["role"] as UserRole; // ✅ Explicitly cast role to UserRole
+
     setAuthStateInternal({
       api_token: cookies["api_token"] || null,
-      is_admin: cookies["is_admin"] === "true",
+      role: role || null, 
     });
   }, []);
 
@@ -29,15 +34,15 @@ export const useAuthState = () => {
       }
     }
 
-    if (state.is_admin !== undefined) {
-      if (state.is_admin !== null) {
-        setCookie(null, "is_admin", String(state.is_admin), {
+    if (state.role !== undefined) {
+      if (state.role && ["admin", "agent", "passenger", "driver"].includes(state.role)) {
+        setCookie(null, "role", state.role, {
           path: "/",
           secure: true,
           sameSite: "strict",
         });
       } else {
-        destroyCookie(null, "is_admin");
+        destroyCookie(null, "role");
       }
     }
 
@@ -46,11 +51,14 @@ export const useAuthState = () => {
 
   const logout = () => {
     destroyCookie(null, "api_token");
-    destroyCookie(null, "is_admin");
+    destroyCookie(null, "role");
     setAuthStateInternal({
       api_token: null,
-      is_admin: false,
+      role: null,
     });
+
+    logoutUser()
+
   };
 
   return { authState, setAuthState, logout };

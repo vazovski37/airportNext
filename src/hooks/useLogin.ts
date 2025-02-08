@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { LoginFormData, LoginResponse } from "@/interfaces/auth";
 import { loginUser } from "@/services/authService";
 import { useAuth } from "@/context/AuthContext";
+import { setCookie } from "nookies"; // ✅ Ensure cookies are updated
 
 const useLogin = () => {
   const [loading, setLoading] = useState(false);
@@ -17,17 +18,38 @@ const useLogin = () => {
     try {
       const response: LoginResponse = await loginUser(formData);
 
-      // Update authentication state via AuthProvider
-      setAuthState({
-        api_token: response.token,
-        is_admin: response.is_admin ?? false,
+      const { token, user } = response;
+      const { role } = user;
+
+      // ✅ Store authentication details in cookies
+      setCookie(null, "api_token", token, {
+        path: "/",
+        secure: true,
+        sameSite: "strict",
       });
 
-      // Redirect based on user role
-      const redirectPath = response.is_admin ? "/admin-dashboard" : "/tickets";
+      setCookie(null, "role", role, {
+        path: "/",
+        secure: true,
+        sameSite: "strict",
+      });
+
+      // ✅ Update authentication state in AuthProvider
+      setAuthState({
+        api_token: token,
+        role,
+      });
+
+      // ✅ Redirect based on role
+      let redirectPath = "/tickets"; // Default for passengers
+      if (role === "admin") redirectPath = "/admin-dashboard";
+      else if (role === "driver") redirectPath = "/driver-dashboard";
+      else if (role === "agent") redirectPath = "/agent-dashboard";
+
       router.push(redirectPath);
     } catch (err: any) {
-      setError(err.response?.data?.message || "An error occurred.");
+      console.error("Login error:", err);
+      setError(err?.response?.data?.message || "An error occurred during login.");
     } finally {
       setLoading(false);
     }

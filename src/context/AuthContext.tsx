@@ -7,6 +7,9 @@ import { IAuthState } from "@/interfaces/auth";
 interface AuthContextProps {
   isLoggedIn: boolean;
   isAdmin: boolean;
+  isDriver: boolean;
+  isAgent: boolean;
+  isPassenger: boolean;
   setAuthState: (state: Partial<IAuthState>) => void;
   logout: () => void;
 }
@@ -16,15 +19,15 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { authState, setAuthState, logout } = useAuthState();
 
-  useEffect(() => {
-    // Optional: You can add logic to validate token or re-fetch user details here
-  }, []);
 
   return (
     <AuthContext.Provider
       value={{
         isLoggedIn: !!authState.api_token,
-        isAdmin: authState.is_admin,
+        isAdmin: authState.role === "admin",
+        isDriver: authState.role === "driver",
+        isAgent: authState.role === "agent",
+        isPassenger: authState.role === "passenger",
         setAuthState,
         logout,
       }}
