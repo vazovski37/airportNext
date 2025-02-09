@@ -60,5 +60,6 @@ export interface IUser {
   email_verified: number;
   created_at: string;
   updated_at: string;
-  role: "admin" | "agent" | "passenger" | "driver";
+  role: string;
 }
+  // "admin" | "agent" | "passenger" | "driver" ;

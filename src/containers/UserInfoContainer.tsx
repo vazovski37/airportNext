@@ -17,7 +17,7 @@ const UserInfoContainer: React.FC = () => {
     return <p className="text-center text-gray-600">No user information available.</p>;
   }
 
-  const { first_name, last_name, email } = user.user;
+  const { first_name, last_name, email } = user;
 
   return (
     <div className="flex justify-center mt-10">
