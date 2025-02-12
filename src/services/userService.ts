@@ -10,7 +10,7 @@ export const fetchUsers = async (search: string, role: string): Promise<IUser[]>
 };
 
 export const updateUserRoleApi = async (id: number, role: string): Promise<void> => {
-  await apiPut(`/api/users/${id}`, { role });
+  await apiPut(`/api/users/${id}/role`, { role });
 };
 
 export const deleteUserApi = async (id: number): Promise<void> => {

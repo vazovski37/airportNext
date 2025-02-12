@@ -5,6 +5,8 @@ import { useUsers } from "@/hooks/useUsers";
 import STable from "@/design-components/STable/STable";
 import SButton from "@/design-components/SButton/SButton";
 import SBadge from "@/design-components/SBadge/SBadge";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit, faTrash, faCheck, faTimes, faFilter } from "@fortawesome/free-solid-svg-icons";
 
 const UsersAdminPanel = () => {
   const { users, loading, error, loadUsers, updateUserRole, deleteUser } = useUsers();
@@ -47,9 +49,7 @@ const UsersAdminPanel = () => {
             <option value="admin">Admin</option>
           </select>
         ) : (
-          <SBadge size="sm" color="gray">
-            {row.role}
-          </SBadge>
+          <SBadge size="sm" color="gray">{row.role}</SBadge>
         ),
     },
     {
@@ -57,23 +57,30 @@ const UsersAdminPanel = () => {
       accessor: "actions",
       render: (row: any) =>
         editingId === row.id ? (
-          <>
+          <div className="flex gap-2">
             <SButton onClick={() => handleSaveRole(row.id)} type="primary" size="sm">
-              ✅ Save
+              <FontAwesomeIcon icon={faCheck} className="mr-1" /> Save
             </SButton>
             <SButton onClick={() => setEditingId(null)} type="secondaryGray" size="sm">
-              ❌ Cancel
+              <FontAwesomeIcon icon={faTimes} className="mr-1" /> Cancel
             </SButton>
-          </>
+          </div>
         ) : (
-          <>
-            <SButton onClick={() => { setEditingId(row.id); setNewRole(row.role); }} type="secondaryColor" size="sm">
-              ✏️ Edit
+          <div className="flex gap-2">
+            <SButton
+              onClick={() => {
+                setEditingId(row.id);
+                setNewRole(row.role);
+              }}
+              type="secondaryColor"
+              size="sm"
+            >
+              <FontAwesomeIcon icon={faEdit} className="mr-1" /> Edit
             </SButton>
             <SButton onClick={() => deleteUser(row.id)} type="secondaryGray" size="sm">
-              🗑️ Delete
+              <FontAwesomeIcon icon={faTrash} className="mr-1" /> Delete
             </SButton>
-          </>
+          </div>
         ),
     },
   ];
@@ -81,6 +88,8 @@ const UsersAdminPanel = () => {
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <h2 className="text-2xl font-bold text-gray-700 mb-6">Manage Users</h2>
+
+      {/* 🔍 Search & Filter */}
       <div className="mb-4 flex gap-4">
         <input
           type="text"
@@ -101,10 +110,14 @@ const UsersAdminPanel = () => {
           <option value="admin">Admin</option>
         </select>
         <SButton onClick={handleFilter} type="primary" size="sm">
-          Filter
+          <FontAwesomeIcon icon={faFilter} className="mr-1" /> Filter
         </SButton>
       </div>
+
+      {/* 🔴 Error Message */}
       {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+
+      {/* 📊 User Table */}
       <STable data={users} columns={columns} isLoading={loading} emptyMessage="No users found." />
     </div>
   );

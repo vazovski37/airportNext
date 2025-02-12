@@ -7,7 +7,7 @@ export const useVehicles = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    // Fetch all vehicles
+    // ✅ Fetch all vehicles (force refresh)
     const loadVehicles = async () => {
         try {
             setLoading(true);
@@ -24,41 +24,31 @@ export const useVehicles = () => {
         loadVehicles();
     }, []);
 
-    // Create a vehicle
+    // ✅ Create a vehicle and immediately refresh UI
     const createVehicle = async (vehicleData: { vehicle_name: string; vehicle_capacity: number }) => {
         try {
-            const newVehicle = await createVehicleApi(vehicleData);
-    
-            if (!newVehicle || !newVehicle.id) {
-                throw new Error("Invalid response from API");
-            }
-    
-            setVehicles((prev) => [...prev, newVehicle]); // ✅ Add new vehicle immediately
-    
-            return newVehicle; // ✅ Ensure it returns the created vehicle
+            await createVehicleApi(vehicleData);
+            await loadVehicles(); // ✅ Fetch latest vehicles after creation
         } catch (err) {
             setError("Failed to create vehicle.");
         }
     };
-    
 
-    // Modify a vehicle
+    // ✅ Modify a vehicle and refresh UI
     const modifyVehicle = async (id: number, vehicleData: { vehicle_name: string; vehicle_capacity: number }) => {
         try {
-            const updatedVehicle = await updateVehicleApi(id, vehicleData);
-            setVehicles((prev) =>
-                prev.map((vehicle) => (vehicle.id === id ? updatedVehicle : vehicle))
-            ); // ✅ Update UI immediately
+            await updateVehicleApi(id, vehicleData);
+            await loadVehicles(); // ✅ Fetch latest vehicles after update
         } catch (err) {
             setError("Failed to update vehicle.");
         }
     };
 
-    // Remove a vehicle
+    // ✅ Remove a vehicle and refresh UI
     const removeVehicle = async (id: number) => {
         try {
             await deleteVehicleApi(id);
-            setVehicles((prev) => prev.filter((vehicle) => vehicle.id !== id)); // ✅ Remove immediately
+            await loadVehicles(); // ✅ Fetch latest vehicles after deletion
         } catch (err) {
             setError("Failed to delete vehicle.");
         }
