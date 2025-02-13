@@ -4,12 +4,18 @@ import WelcomeComponent from "../Welcome/WelcomeComponent";
 import SearchForTicket from "../SearchForTicket/SearchForTicket";
 import heroImage from "../../assets/SHUTTLE-BUS.jpg.webp";
 import { ITicket } from "@/interfaces/ticket";
+import { usePathname } from "next/navigation";
 
 interface HeroSectionProps {
   setTickets: (tickets: ITicket[] | null) => void;
 }
 
 function HeroSection({ setTickets }: HeroSectionProps) {
+
+  const pathname = usePathname();
+  const isTicketsPage = pathname === "/tickets";
+  
+
   return (
     <div className="relative w-full h-screen md:h-[600px]">
       <Image
@@ -26,7 +32,8 @@ function HeroSection({ setTickets }: HeroSectionProps) {
 
       <div className="relative z-10 flex flex-col items-center justify-center mt-[20px] h-full gap-[44px] px-[16px]">
         <WelcomeComponent />
-        <SearchForTicket setTickets={setTickets} />
+        
+        {isTicketsPage && <SearchForTicket setTickets={setTickets} />}
       </div>
     </div>
   );

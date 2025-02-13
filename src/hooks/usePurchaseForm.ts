@@ -55,7 +55,7 @@ const usePurchaseForm = (ticketId: number, price: number) => {
       return;
     }
 
-    if (userError || !user?.user.id) {
+    if (userError || !user?.id) {
       alert("Failed to retrieve user information. Please try again.");
       return;
     }
