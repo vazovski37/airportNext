@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 
 export const config = {
   matcher: [
-    "/admin-dashboard/:path*",
+    // "/admin-dashboard/:path*",
     "/driver-dashboard/:path*",
     "/agent-dashboard/:path*",
     "/tickets",
