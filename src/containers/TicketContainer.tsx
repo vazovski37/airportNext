@@ -7,16 +7,25 @@ import useAllBoughtTickets from "@/hooks/useAllBoughtTickets";
 import STicketCard from "@/design-components/STicketCard/STicketCard";
 import { ITicket } from "@/interfaces/ticket";
 
-type TicketContainerType = "availableTickets" | "userPurchasedTickets" | "allPurchasedTickets" | "searchAvailableTickets";
+type TicketContainerType =
+  | "availableTickets"
+  | "userPurchasedTickets"
+  | "allPurchasedTickets"
+  | "searchAvailableTickets";
 
 interface TicketContainerProps {
   type: TicketContainerType;
-  tickets?: ITicket[] | null; 
-  loading?: boolean; 
-  error?: string | null; 
+  tickets?: ITicket[] | null;
+  loading?: boolean;
+  error?: string | null;
 }
 
-const TicketContainer: React.FC<TicketContainerProps> = ({ type, tickets: passedTickets, loading: passedLoading, error: passedError }) => {
+const TicketContainer: React.FC<TicketContainerProps> = ({
+  type,
+  tickets: passedTickets,
+  loading: passedLoading,
+  error: passedError,
+}) => {
   let tickets: ITicket[] | null = null;
   let loading = false;
   let error: string | null = null;
@@ -77,9 +86,7 @@ const TicketContainer: React.FC<TicketContainerProps> = ({ type, tickets: passed
               hour: "2-digit",
               minute: "2-digit",
             })}
-            travelDuration={`${Math.floor(ticket.travel_duration / 60)}h ${
-              ticket.travel_duration % 60
-            }m`}
+            travelDuration={`${Math.floor(ticket.travel_duration / 60)}h ${ticket.travel_duration % 60}m`}
             departureLocation={ticket.departure_location}
             terminalInfo={null}
             arrivalLocation={ticket.destination_location}
@@ -87,7 +94,9 @@ const TicketContainer: React.FC<TicketContainerProps> = ({ type, tickets: passed
             transportMode={ticket.vehicle_name}
             passengerName={type !== "availableTickets" && type !== "searchAvailableTickets" ? ticket.passengerName : undefined}
             purchaseDate={type !== "availableTickets" && type !== "searchAvailableTickets" ? ticket.purchaseDate : undefined}
-            features={[]} 
+            features={ticket.features || []} 
+            uuid={ticket.uuid} // Adding UUID to STicketCard
+            isUsed={ticket.isUsed} // Adding scanned status to STicketCard
           />
         ))}
       </div>

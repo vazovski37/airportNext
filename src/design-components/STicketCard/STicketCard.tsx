@@ -1,9 +1,10 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBus, faWifi, faBolt } from "@fortawesome/free-solid-svg-icons";
+import { faBus, faWifi, faBolt, faQrcode, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import SBadge from "@/design-components/SBadge/SBadge";
 import SButton from "@/design-components/SButton/SButton";
 import { useRouter } from "next/navigation";
+import { useQRCode } from "@/hooks/useQRCode";
 
 export interface STicketCardProps {
   id: string | number;
@@ -22,6 +23,8 @@ export interface STicketCardProps {
     lastName: string;
   };
   purchaseDate?: string;
+  uuid: string;
+  isUsed: boolean;
 }
 
 const STicketCard: React.FC<STicketCardProps> = ({
@@ -38,12 +41,16 @@ const STicketCard: React.FC<STicketCardProps> = ({
   features,
   passengerName,
   purchaseDate,
+  uuid,
+  isUsed,
 }) => {
-    const router = useRouter();
+  const router = useRouter();
+  const { generateQRCode, isScanned, startScanner, videoRef } = useQRCode(uuid, isUsed);
 
-    const handleNavigate = () => {
-      router.push(`/purchase/${id}`);
-    };
+  const handleNavigate = () => {
+    router.push(`/purchase/${id}`);
+  };
+
   return (
     <div className="w-full p-4 bg-white rounded-lg shadow-md border border-gray-300 flex flex-col lg:flex-row items-start lg:items-center justify-between">
       <div className="w-full lg:w-[65%]">
@@ -85,6 +92,28 @@ const STicketCard: React.FC<STicketCardProps> = ({
           )}
         </div>
 
+        {/* QR Code Section */}
+        <div className="flex items-center gap-3">
+          {generateQRCode()}
+          {isScanned ? (
+            <FontAwesomeIcon icon={faCheckCircle} className="text-green-500 text-lg" title="Scanned" />
+          ) : (
+            <FontAwesomeIcon icon={faQrcode} className="text-gray-500 text-lg" title="Not Scanned" />
+          )}
+        </div>
+
+        {/* Scanner Button */}
+        {mode === "purchased" && !isScanned && (
+          <SButton
+            type="primary"
+            size="sm"
+            className="px-6 py-2 rounded bg-blue-600 text-white font-medium"
+            onClick={startScanner}
+          >
+            Scan QR
+          </SButton>
+        )}
+
         {mode === "available" ? (
           <SButton
             type="primary"
@@ -97,7 +126,7 @@ const STicketCard: React.FC<STicketCardProps> = ({
         ) : (
           <div className="text-gray-600 text-sm text-right">
             <p>
-              <span className="font-semibold">passenger:</span> {passengerName?.firstName} {passengerName?.lastName}
+              <span className="font-semibold">Passenger:</span> {passengerName?.firstName} {passengerName?.lastName}
             </p>
             <p>
               <span className="font-semibold">Purchased on:</span> {purchaseDate}

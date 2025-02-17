@@ -23,7 +23,10 @@ export interface ITicket {
     lastName: string;
   };
   purchaseDate?: string;
+  uuid: string; // Unique identifier for QR code
+  isUsed: boolean; // Indicates if the QR code has been scanned
 }
+
 export interface ITimetable {
   id: number;
   route_id: number;
